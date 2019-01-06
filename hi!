@@ -1,0 +1,5 @@
+# Ignore all Comment in Vim
+hi! link Comment Ignore
+
+# Ignore all Comment in Vim
+hi! link Comment Ignore

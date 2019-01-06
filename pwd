@@ -1,0 +1,35 @@
+# Ensure path permissions from '.' prior to root
+pwd|grep -o '/'|perl -ne '$x.="./.";print`readlink -f $x`'|xargs -tn1 chmod 755
+
+# Display your current working directory.
+pwd
+
+# show current directory
+pwd
+
+# Show current working directory of a process
+pwdx pid
+
+# copy string to clipboard
+pwd | xclip
+
+# Copy current/working directory to clipboard
+pwd | tr -d '\n' | xsel -b
+
+# Find out current working directory of a process
+pwdx $(pgrep command)
+
+# How to expire the password to force her change [AIX]
+pwdadm -f ADMCHG [user]
+
+# Show current working directory of a process
+pwdx pid
+
+# copy string to clipboard
+pwd | xclip
+
+# Copy current/working directory to clipboard
+pwd | tr -d '\n' | xsel -b
+
+# Find out current working directory of a process
+pwdx $(pgrep command)

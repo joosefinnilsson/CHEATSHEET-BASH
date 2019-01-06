@@ -1,0 +1,371 @@
+# Extend the opensuse buildservice key for a project and trigger its rebuild
+project=YOURPROJECTHERE; package=YOURPACKAGEHERE; osc signkey extend $project; osc rebuildpac project package
+
+# Emulate perl 'print "#" x 20, "\n"'
+printf '%*s\n' 20 | tr ' ' '#'
+
+# Merge files, joining each line in one line
+pr -m -t file1 file2 ...
+
+# List files that DO NOT match a pattern
+printf "%s\n" !(pattern) ## ksh, or bash with shopt -s extglob
+
+# Print environment information.
+printenv
+
+# Print a row of 50 hyphens
+printf "%.50d" 0 | tr 0 -
+
+# Print a row of 50 hyphens
+printf "%50s\n"|tr ' ' -
+
+# Ping scanning without nmap
+prefix="10.0.0" && for i in `seq 25`; do ping -c 1 $prefix.$i &> /dev/null && echo "Answer from: $prefix.$i" ; done
+
+# hexadecimal2decimal
+printf "%d\n" \0x64
+
+# Get the rough (german) time from Twitter by @zurvollenstunde
+printf "%02d:%02d\n" $(curl -s "http://search.twitter.com/search?from=zurvollenstunde&rpp=1" | grep -E '(Es ist jetzt|ago)'  | sed 's/<[^>]*>//g;s/[^[:digit:]]//g'  | xargs )
+
+# List all available commands (bash, ksh93)
+printf "%s\n" ${PATH//:/\/* }
+
+# Generate MD5 hash for a string
+printf "$string" | md5sum
+
+# Show directories in the PATH, one per line
+print -l $path
+
+# Show the PATH, one directory per line
+printf ${PATH//:/\\n}
+
+# Pronounce an English word using Merriam-Webster.com
+pronounce(){ wget -qO- $(wget -qO- "http://www.m-w.com/dictionary/$@" | grep 'return au' | sed -r "s|.*return au\('([^']*)', '([^'])[^']*'\).*|http://cougar.eb.com/soundc11/\2/\1|") | aplay -q; }
+
+# Create AUTH PLAIN string to test SMTP AUTH session
+printf '\!:1\0\!:1\0\!:2' | mmencode | tr -d '\n' | sed 's/^/AUTH PLAIN /'
+
+# Print a row of characters the width of terminal
+printf -vl "%${COLUMNS:-`tput cols 2>&-||echo 80`}s\n" && echo ${l// /-};
+
+# Resize a Terminal Window
+printf "\e[8;70;180;t"
+
+# Limit the cpu usage of a process
+prlimit cpu=10 sort -u hugefile
+
+# Print a row of characters across the terminal
+printf -v row "%${COLUMNS}s"; echo ${row// /#}
+
+# sudo for entire line (including pipes and redirects)
+proceed_sudo () { sudor_command="`HISTTIMEFORMAT=\"\" history 1 | sed -r -e 's/^.*?sudor//' -e 's/\"/\\\"/g'`" ; sudo sh -c "$sudor_command"; }; alias sudor="proceed_sudo # "
+
+# Prefix command output with duration for each line
+program | gawk 'BEGIN { l=systime() ; p=" start " } { t=systime(); print t-l "s " p; l=t; p=$0 } END { t=systime(); print t-l "s " p}'
+
+# generate a telephone keypad
+printf "%s\t%s\t%s\n" {1..9} '*' 0 '#'
+
+# Prepend a text to a file.
+prepend () { array=("$@"); len=${#array[@]}; file=${array[$len-1]}; text=${array[@]:0:$len-1}; printf '%s\n' 0a "$text" . w | ed -s "$file"; }
+
+# list with full path
+printf "$PWD/%s\n" *
+
+# formatting number with comma
+printf "%'d\n" 1234567
+
+# Print random emoji in terminal
+printf "\U$(printf '%x' $((RANDOM%79+128512)) )"
+
+# chroot, bind mount  without root privilege/setup
+proot -r /media/user/ubuntu12.10/  cat /etc/motd
+
+# split source code to page with numbers
+pr -l 40 bitree.c > printcode; split -40 printcode -d page_
+
+# Use Perl like grep
+prep () { perl -nle 'print if '"$1"';' $2 }
+
+# urldecoding
+printf $(echo -n $1 | sed 's/\\/\\\\/g;s/\(%\)\([0-9a-fA-F][0-9a-fA-F]\)/\\x\2/g')
+
+# Print a row of characters across the terminal
+printf "%`tput cols`s"|tr ' ' '#'
+
+# Find all dot files and directories
+printf "%s\n" .*
+
+# Get your bash scripts to handle options (-h, help etc) and spit out auto-formatted help or man page when asked!!
+process-getopt
+
+# cloning partition tables under Solaris
+prtvtoc /dev/rdsk/c0t0d0s2 | fmthard -s - /dev/rdsk/c0t1d0s2
+
+# print text in color red
+printTextInColorRed () { echo -e '\033[01;31m\033[K'"$@"'\033[m\033[K' ;}   ## print text/string in color red
+
+# Function to change prompt
+prompt (){ if [ "$1" = "on" ]; then . ~/.bash_profile; else if [ "$1" = "off" ];then PS1="$ ";fi;fi; }
+
+# Show highlighted text with full terminal width
+printf "\e[7m%-`tput cols`s\e[0m\n" "Full width highlighted line"
+
+# Join the content of a bash array with commas
+printf  " -e %s" ${ARRAY[*]}
+
+# Pronounce an English word using Dictionary.com
+pronounce(){ wget -qO- $(wget -qO- "http://dictionary.reference.com/browse/$@" | grep 'soundUrl' | head -n 1 | sed 's|.*soundUrl=\([^&]*\)&.*|\1|' | sed 's/%3A/:/g;s/%2F/\//g') | mpg123 -; }
+
+# Big (four-byte) $RANDOM
+printf %d 0x`dd if=/dev/urandom bs=1 count=4 2>/dev/null | od -x | awk 'NR==1 {print $2$3}'`
+
+# get the ascii number with bash builtin printf
+printf "%d\n" "'A" "'B"
+
+# Password generator
+printf '%s-%s-%s-%s\n' $(grep -v "[A-Z]\|'" /usr/share/dict/british | shuf -n 4)
+
+# Generate binary sequence data
+printf "%x\n" $(seq 0 255) | xargs -n1 -IH echo -ne \\xH > test.dat
+
+# Get a count of how many file types a project has
+printf "\n%25s%10sTOTAL\n" 'FILE TYPE' ' '; for ext in $(find . -iname \*.* | egrep -o '\.[^[:space:].]+$' | egrep -v '\.svn*' | sort -f | uniq -i); do count=$(find . -iname \*$ext | wc -l); printf "%25s%10s%d\n" $ext ' '  $count; done
+
+# prips can be used to print all IP addresses of a specified range.
+prips
+
+# Estimate an economic bitcoin-cli fee and display as sat/B with date time stamp
+printf %g "$(bitcoin-cli estimatesmartfee 6 "ECONOMICAL" | jq .feerate*100000)";printf " sat/B estimated feerate for 6 confirmations as of $(date +%c)\nDivide by 100,000 to get btc/KB\n"
+
+# Ping sweep without NMAP
+prefix="169.254" && for i in {0..254}; do echo $prefix.$i/8; for j in {1..254}; do sh -c "ping -m 1 -c 1 -t 1 $prefix.$i.$j | grep \"icmp\" &" ; done; done
+
+# Fibonacci numbers with sh
+prev=0;next=1;echo $prev;while(true);do echo $next;sum=$(($prev+$next));prev=$next;next=$sum;sleep 1;done
+
+# Find all dot files and directories
+printf "%s\n" .*
+
+# get process id of command
+processid=$(ps aux | grep 'nginx' | grep -v grep| awk '{print $2}')
+
+# Find today created files
+print -rl **/*(.m0)
+
+# Find files with size over 100MB and output with better lay-out
+print -rl **/*(.Lm+100)
+
+# Filtering IP address from ifconfig usefule in scripts
+print ${$(ifconfig wlan0)[6]}
+
+# Get the /dev/disk/by-id fragment for a physical drive
+print /dev/disk/by-id/*(@[1]:t)
+
+# repeat any string or char n times without spaces between
+printf  'xyz%.0s' {1..20}
+
+# list all world-writeable Linux files
+print -rl /**/*(.f:o+w:)
+
+# Join the content of a bash array with commas
+printf "%s," "${LIST[@]}" | cut -d "," -f 1-${#LIST[@]}
+
+# Clear terminal screen as well as terminal buffer
+printf "\ec"
+
+# reverse order of file
+printf "g/^/m0\nw\nq"|ed $FILE
+
+# put environment variable in history to edit
+print -s "PATH='$PATH'"
+
+# Change a text files contents without opening it, or intermediate files.
+print 'g/'delete this line'/delete\nwq' | ex file.txt
+
+# Pronounce an English word using Merriam-Webster.com
+pronounce(){ xidel "http://www.m-w.com/dictionary/$*" -f "replace(css('.au')[1]/@onclick,\".*'([^']+)', *'([^']+)'.*\", '/audio.php?file=\$1&word=\$2')" -f 'css("embed")[1]/@src' download - | aplay -q;}
+
+# get processid of running process
+processid =$(ps aux | grep 'ProcessName' | grep -v grep| awk '{print $2}')
+
+# See the total amount of data on an AIX machine
+print "$(lsvg -Lo |xargs lsvg -L|grep "TOTAL PPs"|awk -F"(" '{print$2}'|sed -e "s/)//g" -e "s/megabytes/+/g"|xargs|sed -e "s/^/(/g" -e "s/+$/)\/1000/g"|bc ) GB"
+
+# Generate an over-the-top UUID
+printf $(( echo "obase=16;$(echo $$$(date +%s%N))"|bc; ip link show|sed -n '/eth/ {N; p}'|grep -o -E '([[:xdigit:]]{1,2}:){5}[[:xdigit:]]{1,2}'|head -c 17 )|tr -d [:space:][:punct:]  |sed 's/[[:xdigit:]]\{2\}/\\x&/g')|sha1sum|head -c 32; echo
+
+# A line across the entire width of the terminal
+printf "%$(tput cols)s\n"|tr ' ' '='
+
+# Print a row of characters across the terminal
+println() {echo -n -e "\e[038;05;${2:-255}m";printf "%$(tput cols)s"|sed "s/ /${1:-=}/g"}
+
+# for loop with leading zero in bash 3
+printf "%02u " {3..20}; echo
+
+# progress bar for cp
+progr
+
+# Merge files, joining each line in one line
+pr -m -t file1 file2 ...
+
+# List all available commands (bash, ksh93)
+printf "%s\n" ${PATH//:/\/* }
+
+# Show the PATH, one directory per line
+printf ${PATH//:/\\n}
+
+# Pronounce an English word using Merriam-Webster.com
+pronounce(){ wget -qO- $(wget -qO- "http://www.m-w.com/dictionary/$@" | grep 'return au' | sed -r "s|.*return au\('([^']*)', '([^'])[^']*'\).*|http://cougar.eb.com/soundc11/\2/\1|") | aplay -q; }
+
+# Create AUTH PLAIN string to test SMTP AUTH session
+printf '\!:1\0\!:1\0\!:2' | mmencode | tr -d '\n' | sed 's/^/AUTH PLAIN /'
+
+# Print a row of characters the width of terminal
+printf -vl "%${COLUMNS:-`tput cols 2>&-||echo 80`}s\n" && echo ${l// /-};
+
+# Resize a Terminal Window
+printf "\e[8;70;180;t"
+
+# Limit the cpu usage of a process
+prlimit cpu=10 sort -u hugefile
+
+# Print a row of characters across the terminal
+printf -v row "%${COLUMNS}s"; echo ${row// /#}
+
+# sudo for entire line (including pipes and redirects)
+proceed_sudo () { sudor_command="`HISTTIMEFORMAT=\"\" history 1 | sed -r -e 's/^.*?sudor//' -e 's/\"/\\\"/g'`" ; sudo sh -c "$sudor_command"; }; alias sudor="proceed_sudo # "
+
+# Prefix command output with duration for each line
+program | gawk 'BEGIN { l=systime() ; p=" start " } { t=systime(); print t-l "s " p; l=t; p=$0 } END { t=systime(); print t-l "s " p}'
+
+# generate a telephone keypad
+printf "%s\t%s\t%s\n" {1..9} '*' 0 '#'
+
+# Prepend a text to a file.
+prepend () { array=("$@"); len=${#array[@]}; file=${array[$len-1]}; text=${array[@]:0:$len-1}; printf '%s\n' 0a "$text" . w | ed -s "$file"; }
+
+# list with full path
+printf "$PWD/%s\n" *
+
+# formatting number with comma
+printf "%'d\n" 1234567
+
+# Print random emoji in terminal
+printf "\U$(printf '%x' $((RANDOM%79+128512)) )"
+
+# chroot, bind mount  without root privilege/setup
+proot -r /media/user/ubuntu12.10/  cat /etc/motd
+
+# split source code to page with numbers
+pr -l 40 bitree.c > printcode; split -40 printcode -d page_
+
+# Use Perl like grep
+prep () { perl -nle 'print if '"$1"';' $2 }
+
+# urldecoding
+printf $(echo -n $1 | sed 's/\\/\\\\/g;s/\(%\)\([0-9a-fA-F][0-9a-fA-F]\)/\\x\2/g')
+
+# Print a row of characters across the terminal
+printf "%`tput cols`s"|tr ' ' '#'
+
+# Find all dot files and directories
+printf "%s\n" .*
+
+# Get your bash scripts to handle options (-h, help etc) and spit out auto-formatted help or man page when asked!!
+process-getopt
+
+# cloning partition tables under Solaris
+prtvtoc /dev/rdsk/c0t0d0s2 | fmthard -s - /dev/rdsk/c0t1d0s2
+
+# print text in color red
+printTextInColorRed () { echo -e '\033[01;31m\033[K'"$@"'\033[m\033[K' ;}   ## print text/string in color red
+
+# Function to change prompt
+prompt (){ if [ "$1" = "on" ]; then . ~/.bash_profile; else if [ "$1" = "off" ];then PS1="$ ";fi;fi; }
+
+# Show highlighted text with full terminal width
+printf "\e[7m%-`tput cols`s\e[0m\n" "Full width highlighted line"
+
+# Join the content of a bash array with commas
+printf  " -e %s" ${ARRAY[*]}
+
+# Pronounce an English word using Dictionary.com
+pronounce(){ wget -qO- $(wget -qO- "http://dictionary.reference.com/browse/$@" | grep 'soundUrl' | head -n 1 | sed 's|.*soundUrl=\([^&]*\)&.*|\1|' | sed 's/%3A/:/g;s/%2F/\//g') | mpg123 -; }
+
+# Big (four-byte) $RANDOM
+printf %d 0x`dd if=/dev/urandom bs=1 count=4 2>/dev/null | od -x | awk 'NR==1 {print $2$3}'`
+
+# get the ascii number with bash builtin printf
+printf "%d\n" "'A" "'B"
+
+# Password generator
+printf '%s-%s-%s-%s\n' $(grep -v "[A-Z]\|'" /usr/share/dict/british | shuf -n 4)
+
+# Generate binary sequence data
+printf "%x\n" $(seq 0 255) | xargs -n1 -IH echo -ne \\xH > test.dat
+
+# Get a count of how many file types a project has
+printf "\n%25s%10sTOTAL\n" 'FILE TYPE' ' '; for ext in $(find . -iname \*.* | egrep -o '\.[^[:space:].]+$' | egrep -v '\.svn*' | sort -f | uniq -i); do count=$(find . -iname \*$ext | wc -l); printf "%25s%10s%d\n" $ext ' '  $count; done
+
+# prips can be used to print all IP addresses of a specified range.
+prips
+
+# Estimate an economic bitcoin-cli fee and display as sat/B with date time stamp
+printf %g "$(bitcoin-cli estimatesmartfee 6 "ECONOMICAL" | jq .feerate*100000)";printf " sat/B estimated feerate for 6 confirmations as of $(date +%c)\nDivide by 100,000 to get btc/KB\n"
+
+# Ping sweep without NMAP
+prefix="169.254" && for i in {0..254}; do echo $prefix.$i/8; for j in {1..254}; do sh -c "ping -m 1 -c 1 -t 1 $prefix.$i.$j | grep \"icmp\" &" ; done; done
+
+# Fibonacci numbers with sh
+prev=0;next=1;echo $prev;while(true);do echo $next;sum=$(($prev+$next));prev=$next;next=$sum;sleep 1;done
+
+# Find all dot files and directories
+printf "%s\n" .*
+
+# get process id of command
+processid=$(ps aux | grep 'nginx' | grep -v grep| awk '{print $2}')
+
+# Find today created files
+print -rl **/*(.m0)
+
+# Find files with size over 100MB and output with better lay-out
+print -rl **/*(.Lm+100)
+
+# Filtering IP address from ifconfig usefule in scripts
+print ${$(ifconfig wlan0)[6]}
+
+# Get the /dev/disk/by-id fragment for a physical drive
+print /dev/disk/by-id/*(@[1]:t)
+
+# repeat any string or char n times without spaces between
+printf  'xyz%.0s' {1..20}
+
+# list all world-writeable Linux files
+print -rl /**/*(.f:o+w:)
+
+# Join the content of a bash array with commas
+printf "%s," "${LIST[@]}" | cut -d "," -f 1-${#LIST[@]}
+
+# Clear terminal screen as well as terminal buffer
+printf "\ec"
+
+# reverse order of file
+printf "g/^/m0\nw\nq"|ed $FILE
+
+# put environment variable in history to edit
+print -s "PATH='$PATH'"
+
+# Change a text files contents without opening it, or intermediate files.
+print 'g/'delete this line'/delete\nwq' | ex file.txt
+
+# Pronounce an English word using Merriam-Webster.com
+pronounce(){ xidel "http://www.m-w.com/dictionary/$*" -f "replace(css('.au')[1]/@onclick,\".*'([^']+)', *'([^']+)'.*\", '/audio.php?file=\$1&word=\$2')" -f 'css("embed")[1]/@src' download - | aplay -q;}
+
+# get processid of running process
+processid =$(ps aux | grep 'ProcessName' | grep -v grep| awk '{print $2}')
+
+# A line across the entire width of the terminal
+printf "%$(tput cols)s\n"|tr ' ' '='
